@@ -21,3 +21,6 @@ static unsigned int lines      = 0;
  * for example: " /?\"&[]"
  */
 static const char worddelimiters[] = " ";
+
+/* maximum string size of math results */
+#define FLOATSTR_LEN 32

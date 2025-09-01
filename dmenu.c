@@ -233,11 +233,26 @@ match(void)
 	static char **tokv = NULL;
 	static int tokn = 0;
 
-	char buf[sizeof text], *s;
-	int tokc = 0;
+	char buf[sizeof text], floatstr[FLOATSTR_LEN], *s;
+	int i, error, tokc = 0;
 	size_t len, textsize;
-	struct item *item, *lprefix, *lsubstr, *prefixend, *substrend;
+	struct item *item, *lprefix, *lsubstr, *prefixend, *substrend, *resitem;
 
+	matches = lprefix = lsubstr = matchend = prefixend = substrend = NULL;
+
+	/* try to parse input as expression */
+	double res = te_interp(text, &error);
+
+	/* if it successfully parsed, then add it as first item */
+	if (!error) {
+		resitem = calloc(1, sizeof(struct item));
+
+		snprintf(floatstr, sizeof(floatstr), "%.15g", res);
+		resitem->text = strdup(floatstr);
+		appenditem(resitem, &matches, &matchend);
+	}
+
+	/* now try to do what dmenu does by default */
 	strcpy(buf, text);
 	/* separate input text into tokens to be matched individually */
 	for (s = strtok(buf, " "); s; tokv[tokc - 1] = s, s = strtok(NULL, " "))
@@ -245,8 +260,6 @@ match(void)
 			die("cannot realloc %zu bytes:", tokn * sizeof *tokv);
 	len = tokc ? strlen(tokv[0]) : 0;
 
-	matches = lprefix = lsubstr = matchend = prefixend = substrend = NULL;
-	#if 0
 	textsize = strlen(text) + 1;
 	for (item = items; item && item->text; item++) {
 		for (i = 0; i < tokc; i++)
@@ -278,14 +291,6 @@ match(void)
 			matches = lsubstr;
 		matchend = substrend;
 	}
-	#endif
-	struct item* i = calloc(1, sizeof(struct item));
-	char floatString[10];
-	snprintf(floatString, sizeof(floatString), "%.2f", te_interp("5*5", 0));
-	i->text = floatString;
-	i->out = 0;
-	i->left = i->right = NULL;
-	appenditem(i, &matches, &matchend);
 	curr = sel = matches;
 	calcoffsets();
 }
