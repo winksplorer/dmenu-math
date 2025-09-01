@@ -1,0 +1,2 @@
+#!/bin/sh
+dmenu-math_path | dmenu-math "$@" | ${SHELL:-"/bin/sh"} &

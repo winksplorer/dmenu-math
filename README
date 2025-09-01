@@ -1,0 +1,25 @@
+dmenu-math - dynamic menu with math expression support
+======================================================
+dmenu-math is a fork of dmenu, an efficient dynamic menu for X.
+It supports both being the standard dmenu application launcher and a math expression parser using tinyexpr.
+
+
+Requirements
+------------
+In order to build dmenu-math you need the Xlib header files.
+
+
+Installation
+------------
+Edit config.mk to match your local setup (dmenu-math is installed
+into the /usr/local namespace by default).
+
+Afterwards enter the following command to build and install dmenu-math
+(if necessary as root):
+
+    make clean install
+
+
+Running dmenu-math
+------------------
+See the man page for details.
