@@ -7,6 +7,7 @@ It supports both being the standard dmenu application launcher and a math expres
 Requirements
 ------------
 In order to build dmenu-math you need the Xlib header files.
+xclip is required for expression results to be copied into your clipboard.
 
 
 Installation

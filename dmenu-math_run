@@ -1,2 +1,9 @@
 #!/bin/sh
-dmenu-math_path | dmenu-math "$@" | ${SHELL:-"/bin/sh"} &
+sel="$(dmenu-math_path | dmenu-math "$@")"
+
+cmd=${sel%% *}
+if command -v "$cmd" >/dev/null 2>&1; then
+    exec ${SHELL:-/bin/sh} -c "$sel"
+else
+    printf "$sel" | xclip -selection clipboard
+fi
